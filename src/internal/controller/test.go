@@ -8,11 +8,11 @@ import (
 )
 
 type Handler struct {
-	service service.TestService
+	service *service.TestService
 	log     *logger.Logger
 }
 
-func New(service service.TestService, log *logger.Logger) *Handler {
+func New(service *service.TestService, log *logger.Logger) *Handler {
 	return &Handler{
 		service: service,
 		log:     log,
@@ -21,15 +21,6 @@ func New(service service.TestService, log *logger.Logger) *Handler {
 
 func (h *Handler) TestHandler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-
-		// service customer
-		brands, err := h.service.TestMethod(ctx, make([]string, 0))
-		if err != nil {
-			//httpserver.HandleError(ctx, err)
-			return
-		}
-
-		// response := model.Response{Data: brands}
-		ctx.JSON(http.StatusOK, brands)
+		ctx.String(http.StatusOK, "Hello World")
 	}
 }

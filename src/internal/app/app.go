@@ -1,19 +1,18 @@
 package app
 
 import (
-	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"time"
 
 	"github.com/mtank-group/auth-go/src/config"
 	"github.com/mtank-group/auth-go/src/internal/controller"
+	"github.com/mtank-group/auth-go/src/internal/service"
 	"github.com/mtank-group/auth-go/src/pkg/logger"
 )
 
 func Run(cfg *config.Config) {
 	log := logger.New(cfg.Log.Level)
-	ctx := context.Background()
 
 	utc, err := time.LoadLocation(time.UTC.String())
 	if err != nil {
@@ -23,7 +22,15 @@ func Run(cfg *config.Config) {
 	time.Local = utc
 	gin.SetMode(cfg.App.Mode)
 
-	engine := gin.New(log, cfg)
+	engine := gin.New()
 	engine.Use(gin.Logger())
-	controller.Router(log)
+
+	svc := service.NewTestService()
+	hnd := controller.New(svc, log)
+
+	controller.Router(engine, cfg, log, hnd)
+
+	if err := engine.Run(cfg.App.Port); err != nil {
+		log.Fatal(fmt.Sprintf("app - Run - engine.Run: %s", err.Error()))
+	}
 }

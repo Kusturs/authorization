@@ -2,6 +2,13 @@ package service
 
 import "context"
 
-type TestService interface {
-	TestMethod(ctx context.Context, customersIDs []string) ([]interface{}, error)
+type TestService struct {
+}
+
+func NewTestService() *TestService {
+	return &TestService{}
+}
+
+func (s *TestService) TestMethod(ctx context.Context, customersIDs []string) ([]interface{}, error) {
+	return []interface{}{"Hello World"}, nil
 }

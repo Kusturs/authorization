@@ -17,8 +17,8 @@ type (
 	}
 
 	App struct {
-		Mode string `env-required:"true" env:"PRODUCTION_MODE" env-upd:"true"`
-		//ServiceId string `env-required:"true" env:"SERVICE_ID"`
+		Mode string `env-required:"true" env:"APP_MODE" env-upd:"true"`
+		Port string `env-required:"true" env:"APP_PORT" env-upd:"true"`
 	}
 
 	TG struct {
