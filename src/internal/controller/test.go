@@ -21,6 +21,6 @@ func New(service *service.TestService, log *logger.Logger) *Handler {
 
 func (h *Handler) TestHandler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		ctx.String(http.StatusOK, "Hello World")
+		ctx.String(http.StatusOK, "test page")
 	}
 }

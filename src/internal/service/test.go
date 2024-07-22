@@ -10,5 +10,5 @@ func NewTestService() *TestService {
 }
 
 func (s *TestService) TestMethod(ctx context.Context, customersIDs []string) ([]interface{}, error) {
-	return []interface{}{"Hello World"}, nil
+	return []interface{}{"test page"}, nil
 }

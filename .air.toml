@@ -1,0 +1,80 @@
+# Working directory and build directories
+root = "."
+testdata_dir = "testdata"
+tmp_dir = "tmp"
+
+[build]
+# Command to build the project
+cmd = "go build -o ./tmp/main ./src/cmd/app/main.go"
+# Path to the binary file after building
+bin = "tmp/main"
+# Delay between file change checks (in milliseconds)
+delay = 1000
+# Directories to watch
+include_dir = ["src"]
+# Directories to ignore
+exclude_dir = ["vendor", "tmp"]
+# File extensions to watch
+include_ext = ["go", "tpl", "tmpl", "html"]
+# File extensions to ignore
+exclude_ext = ["swp", "tmp"]
+# Files to ignore based on regular expressions
+exclude_regex = ["_test\\.go"]
+# Ignore changes in unchanged files
+exclude_unchanged = false
+# Follow symlinks for directories
+follow_symlink = false
+# Full path to the binary file with environment variables, if needed
+full_bin = ""
+# Files to include for watching
+include_file = []
+# Delay before stopping the old process after a build error
+kill_delay = "0s"
+# Log file for build errors
+log = "build-errors.log"
+# Use polling for file changes if inotify is not supported
+poll = false
+# Polling interval
+poll_interval = 0
+# Commands to run after the build
+post_cmd = []
+# Commands to run before the build
+pre_cmd = []
+# Restart the binary after build
+rerun = false
+# Delay before restarting the binary
+rerun_delay = 500
+# Send an interrupt signal before killing the process
+send_interrupt = false
+# Stop the old process on build errors
+stop_on_error = false
+
+[color]
+# Color settings for log output
+app = ""
+build = "yellow"
+main = "magenta"
+runner = "green"
+watcher = "cyan"
+
+[log]
+# Show only main logs
+main_only = false
+# Show timestamps in logs
+time = false
+
+[misc]
+# Clean the temporary directory on exit
+clean_on_exit = false
+
+[proxy]
+# Proxy settings (if needed)
+app_port = 0
+enabled = false
+proxy_port = 0
+
+[screen]
+# Clear the screen on each rebuild
+clear_on_rebuild = false
+# Keep the screen scroll position
+keep_scroll = true

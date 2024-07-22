@@ -8,6 +8,7 @@ import (
 
 const (
 	testPageRoute = "/test"
+	rootPageRoute = "/"
 )
 
 func Router(
@@ -18,4 +19,5 @@ func Router(
 ) {
 	// r.Use(middlewareController.Metrics())
 	r.GET(testPageRoute, hnd.TestHandler())
+	r.GET(rootPageRoute, RootHandler())
 }
