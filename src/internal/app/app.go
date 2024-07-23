@@ -7,7 +7,6 @@ import (
 
 	"github.com/mtank-group/auth-go/src/config"
 	"github.com/mtank-group/auth-go/src/internal/controller"
-	"github.com/mtank-group/auth-go/src/internal/service"
 	"github.com/mtank-group/auth-go/src/pkg/logger"
 )
 
@@ -25,10 +24,9 @@ func Run(cfg *config.Config) {
 	engine := gin.New()
 	engine.Use(gin.Logger())
 
-	svc := service.NewTestService()
-	hnd := controller.New(svc, log)
+	//hnd := controller.New(log)
 
-	controller.Router(engine, cfg, log, hnd)
+	controller.Router(engine)
 
 	if err := engine.Run(cfg.App.Port); err != nil {
 		log.Fatal(fmt.Sprintf("app - Run - engine.Run: %s", err.Error()))

@@ -13,16 +13,11 @@ type (
 	Config struct {
 		App
 		Log
-		TG
 	}
 
 	App struct {
 		Mode string `env-required:"true" env:"APP_MODE" env-upd:"true"`
 		Port string `env-required:"true" env:"APP_PORT" env-upd:"true"`
-	}
-
-	TG struct {
-		BotKey string `env-required:"true" env:"BOT_KEY"`
 	}
 
 	Log struct {
