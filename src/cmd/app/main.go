@@ -10,7 +10,7 @@ import (
 func main() {
 	cfg, err := config.NewConfig()
 	if err != nil {
-		log.Fatalf("Config error: %s", err)
+		log.Fatalf("failed to load config: %v", err)
 	}
 
 	app.Run(cfg)

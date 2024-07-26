@@ -9,5 +9,5 @@ const (
 )
 
 func Router(r *gin.Engine) {
-	r.GET(rootPageRoute, RootHandler())
+	r.GET(rootPageRoute, AuthHandler())
 }

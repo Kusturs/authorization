@@ -17,7 +17,7 @@ func New(log *logger.Logger) *Handler {
 	}
 }
 
-func RootHandler() gin.HandlerFunc {
+func AuthHandler() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "Auth-go")
 	}
