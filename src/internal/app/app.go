@@ -3,10 +3,13 @@ package app
 import (
 	"context"
 	"fmt"
-	//"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
 	"github.com/mtank-group/auth-go/src/internal/kafka"
+	"io/ioutil"
 	"net"
-	//"time"
+	"os"
+	"strings"
+	"time"
 
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
@@ -25,9 +28,15 @@ import (
 func Run(cfg *config.Config) {
 	log := logger.New(cfg.Log.Level)
 
-	pg, err := postgres.New(
-		GetDbConnectionUrl(cfg),
-	)
+	utc, err := time.LoadLocation(time.UTC.String())
+	if err != nil {
+		log.Fatal(fmt.Sprintf("app - Run - time.LoadLocation: %s", err.Error()))
+	}
+
+	time.Local = utc
+	gin.SetMode(cfg.App.Mode)
+
+	pg, err := postgres.New(GetDbConnectionUrl(cfg))
 	if err != nil {
 		log.Fatal(fmt.Sprintf("app - Run - postgres.New: %s", err.Error()))
 	}
@@ -38,7 +47,10 @@ func Run(cfg *config.Config) {
 		log.Fatal(fmt.Sprintf("app - Run - postgres.Ping: %s", err.Error()))
 	}
 
-	// Initialize repositories and services
+	if err := runMigrations(pg); err != nil {
+		log.Fatal(fmt.Sprintf("app - Run - runMigrations: %s", err.Error()))
+	}
+
 	userRepository := repository.NewUserRepository(pg.Pool)
 	userService := service.NewUserService(userRepository, cfg.JWT.SecretKey)
 
@@ -52,19 +64,32 @@ func Run(cfg *config.Config) {
 			log.Fatal("failed to close Kafka producer: %v", zap.Error(err))
 		}
 	}(kafkaProducer)
+
 	authController := controller.NewAuthController(userService, kafkaProducer)
+
+	// Initialize Gin HTTP server
+	r := gin.Default()
+	controller.Router(r, authController)
+
+	go func() {
+		httpPort := fmt.Sprintf("%s", cfg.App.Port) // fatal error :: when ":%s"
+		if err := r.Run(httpPort); err != nil {
+			log.Fatal("failed to run HTTP server: %v", zap.Error(err))
+		}
+	}()
 
 	// Set up gRPC server
 	grpcServer := grpc.NewServer()
 	pb.RegisterAuthServiceServer(grpcServer, authController)
 
-	lis, err := net.Listen("tcp", cfg.App.Port)
+	grpcAddress := fmt.Sprintf("0.0.0.0:%s", cfg.GRPC.Port)
+	lis, err := net.Listen("tcp", grpcAddress)
 	if err != nil {
 		log.Fatal("failed to listen: %v", zap.Error(err))
 	}
 
 	ctx := context.Background()
-	log.Info(ctx, "server listening at %v", zap.String("address", lis.Addr().String()))
+	log.Info(ctx, "gRPC server listening at %v", zap.String("address", lis.Addr().String()))
 
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatal("failed to serve: %v", zap.Error(err))
@@ -72,9 +97,31 @@ func Run(cfg *config.Config) {
 }
 
 func GetDbConnectionUrl(cfg *config.Config) string {
-	//if cfg.App.Mode != gin.TestMode {
-	//	return cfg.PG.ConnectionURL()
-	//}
 	return cfg.DB.ConnectionURL()
-	//return cfg.PG.ConnectionURLTest()
+}
+
+func runMigrations(pg *postgres.Postgres) error {
+	file, err := os.Open("src/internal/migrations/migrations.sql")
+	if err != nil {
+		return fmt.Errorf("failed to open migration file: %w", err)
+	}
+	defer file.Close()
+
+	content, err := ioutil.ReadAll(file)
+	if err != nil {
+		return fmt.Errorf("failed to read migration file: %w", err)
+	}
+
+	queries := strings.Split(string(content), ";")
+	for _, query := range queries {
+		query = strings.TrimSpace(query)
+		if query == "" {
+			continue
+		}
+		if _, err := pg.Pool.Exec(context.Background(), query); err != nil {
+			return fmt.Errorf("failed to execute migration query: %w", err)
+		}
+	}
+
+	return nil
 }

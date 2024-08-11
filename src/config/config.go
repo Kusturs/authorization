@@ -16,6 +16,7 @@ type (
 		Kafka
 		JWT
 		DB
+		GRPC
 	}
 
 	App struct {
@@ -44,6 +45,10 @@ type (
 		DBName   string `env-required:"true" env:"DB_NAME"`
 		SSLMode  string `env-required:"true" env:"DB_SSLMODE"`
 	}
+
+	GRPC struct {
+		Port string `env-required:"true" env:"GRPC_PORT"`
+	}
 )
 
 // NewConfig returns the application configuration.
@@ -52,9 +57,9 @@ func NewConfig() (*Config, error) {
 
 	err := cleanenv.ReadEnv(cfg)
 	if err != nil {
-		fmt.Printf("Environment variable error: %s, trying to read from .env", err.Error())
-		err = cleanenv.ReadConfig(".env", cfg)
+		err = cleanenv.ReadConfig("/home/burble/Desktop/go_projects/auth-go/.env", cfg)
 		if err != nil {
+			fmt.Println(err)
 			if os.IsNotExist(err) {
 				// when working directory is src/internal/tests
 				err = cleanenv.ReadConfig(filepath.Join("..", "..", "..", ".env"), cfg)

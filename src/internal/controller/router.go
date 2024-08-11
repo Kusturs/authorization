@@ -5,9 +5,13 @@ import (
 )
 
 const (
-	rootPageRoute = "/"
+	authRoute     = "/authenticate"
+	registerRoute = "/register"
+	//confirmRoute = "/confirm"
 )
 
-func Router(r *gin.Engine) {
-	r.GET(rootPageRoute, AuthHandler())
+func Router(r *gin.Engine, authController *AuthController) {
+	r.POST(authRoute, authController.AuthenticateHandler)
+	r.POST(registerRoute, authController.Register)
+	//r.GET(confirmRoute, authController.ConfirmHandler)
 }
