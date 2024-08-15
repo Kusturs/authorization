@@ -1,5 +1,8 @@
 FROM golang:1.22-alpine
 
+# todo: refactor & check
+# todo: test private dependencies here
+
 WORKDIR /app
 
 ENV GO111MODULE=on
