@@ -11,6 +11,8 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
+// todo: rewrite pg connection
+
 const (
 	_defaultMinPoolSize  = 1
 	_defaultMaxPoolSize  = 10
@@ -94,6 +96,7 @@ func (p *Postgres) Ping(ctx context.Context) error {
 
 func CreateDatabaseIfNotExists(url, dbName string) error {
 	// Подключение без указания базы данных
+	// 代码不好，接猫老婆和第二碗饭
 	pg, err := New(url)
 	if err != nil {
 		return fmt.Errorf("failed to connect to PostgreSQL: %w", err)
