@@ -1,4 +1,4 @@
-module github.com/mtank-group/auth-go
+module github.com/solndev/auth-go
 
 go 1.22.3
 

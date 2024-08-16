@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/mtank-group/auth-go/src/config"
-	"github.com/mtank-group/auth-go/src/internal/app"
+	"github.com/solndev/auth-go/config"
+	"github.com/solndev/auth-go/internal/app"
 )
 
 func main() {

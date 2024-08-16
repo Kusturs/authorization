@@ -3,26 +3,26 @@ package app
 import (
 	"context"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/mtank-group/auth-go/src/internal/kafka"
 	"io/ioutil"
 	"net"
 	"os"
 	"strings"
 	"time"
 
+	"github.com/gin-gonic/gin"
+	"github.com/solndev/auth-go/config"
+	"github.com/solndev/auth-go/internal/kafka"
+	"github.com/solndev/auth-go/pkg/logger"
+	"github.com/solndev/auth-go/pkg/postgres"
+
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 
-	"github.com/mtank-group/auth-go/src/config"
-	"github.com/mtank-group/auth-go/src/internal/controller"
-	pb "github.com/mtank-group/auth-go/src/internal/proto"
-	"github.com/mtank-group/auth-go/src/internal/repository"
-	"github.com/mtank-group/auth-go/src/internal/service"
-	"github.com/mtank-group/auth-go/src/pkg/logger"
-	"github.com/mtank-group/auth-go/src/pkg/postgres"
-
 	_ "github.com/lib/pq"
+	"github.com/solndev/auth-go/internal/controller"
+	pb "github.com/solndev/auth-go/internal/proto"
+	"github.com/solndev/auth-go/internal/repository"
+	"github.com/solndev/auth-go/internal/service"
 )
 
 func Run(cfg *config.Config) {

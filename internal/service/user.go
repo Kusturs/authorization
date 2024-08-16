@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/mtank-group/auth-go/src/internal/models"
-	"github.com/mtank-group/auth-go/src/internal/repository"
+	"github.com/solndev/auth-go/internal/models"
+	"github.com/solndev/auth-go/internal/repository"
 )
 
 type UserService struct {

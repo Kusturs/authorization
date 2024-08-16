@@ -2,11 +2,12 @@ package controller
 
 import (
 	"context"
-	"github.com/gin-gonic/gin"
-	"github.com/mtank-group/auth-go/src/internal/kafka"
-	"github.com/mtank-group/auth-go/src/internal/proto"
-	"github.com/mtank-group/auth-go/src/internal/service"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/solndev/auth-go/internal/kafka"
+	"github.com/solndev/auth-go/internal/proto"
+	"github.com/solndev/auth-go/internal/service"
 )
 
 type AuthController struct {

@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/mtank-group/auth-go/src/internal/models"
+	"github.com/solndev/auth-go/internal/models"
 )
 
 type UserRepository struct {
