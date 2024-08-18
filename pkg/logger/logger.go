@@ -65,7 +65,7 @@ func New(level string) *Logger {
 
 // Debug -.
 func (l *Logger) Debug(ctx context.Context, message string, fields ...zap.Field) {
-	if os.Getenv("PRODUCTION_MODE") != "debug" {
+	if os.Getenv("APP_MODE") != "debug" {
 		return
 	}
 	fields = l.appendRequestId(ctx, fields...)
@@ -116,4 +116,9 @@ func (l *Logger) log(level string, message string, fields ...zap.Field) {
 	default:
 		l.logger.WithOptions(zap.AddCallerSkip(2)).Info(fmt.Sprintf("%s message: %v has unknown level %v", level, message, level))
 	}
+}
+
+func (l *Logger) Printf(format string, v ...interface{}) {
+	message := fmt.Sprintf(format, v...)
+	l.logger.Info(message)
 }
