@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/mtank-group/auth-go/src/internal/proto;proto";
+
+// Определяем gRPC сервис AuthService
+service AuthService {
+  // Метод для аутентификации пользователя
+  rpc Authenticate (AuthRequest) returns (AuthResponse) {}
+}
+
+// Сообщение запроса для аутентификации
+message AuthRequest {
+  string username = 1;
+  string password = 2;
+}
+
+// Сообщение ответа для аутентификации
+message AuthResponse {
+  string token = 1;
+  bool success = 2;
+  string message = 3;
+}
